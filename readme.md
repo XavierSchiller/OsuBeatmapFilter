@@ -12,12 +12,12 @@ Either you build it or download from the release [page](https://github.com/Xavie
 
 ## Release Versions Usage
 
-Create a directory where you'll place the .exe downloaded to your system.
+1) Create a directory where you'll place the .exe downloaded to your system.
 
-Create a `selection.json` file in that directory, follow this pattern:
+2) Create a `selection.json` file in that directory, follow this pattern:
 ```json
 {
-  "osuApiKey": "KeyHere.",
+  "osuApiKey": "your osu!Api Key Here.",
   "minimumSR": 5.0,
   "maximumSR": 7.0,
   "approvalStatus": "Ranked", 
@@ -27,18 +27,19 @@ Create a `selection.json` file in that directory, follow this pattern:
   "maximumCombo": 6000,
   "minimumBPM": 90,
   "maximumBPM": 240,
-  "avoidedMappers": ["SomeBlahMapper","SomeMorePP","GIMMEPP"]
+  "avoidedMappers": ["Mapper1","Mapper2","Mapper3"]
 }
 ```
+Please do look at the constraints that you wish to add to your filter by changing the values at `selection.json`
 
-The directory should then have two files respectively
+3) The directory should then have two files respectively
 
 ```bash
 osuFilter.exe
 selection.json
 ```
 
-Create another Directory with the name `beatmaps` and deposit all your .osz files there.
+4) Create another Directory with the name `beatmaps` and deposit all your .osz files there.
 
 The directory should then have
 
@@ -57,7 +58,7 @@ and `beatmaps/` should have
 .
 ```
 
-Then run Filter.exe and wait for it to complete. 
+5) Then run Filter.exe and wait for it to complete. 
 
 
 ## Building
