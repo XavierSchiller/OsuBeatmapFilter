@@ -1,42 +1,35 @@
-const osu = require('node-osu')
-const fs = require('fs')
-const path = require('path')
-var configs;
+const fs = require('fs');
+const path = require('path');
+const selection = require('./selection');
+// Select the correct beatmaps path.
+// By default it assumes that it is in the current directory under the name beatmaps
+const beatmapPath = path.resolve('./', './beatmaps');
 
+console.log('Selecting Path ' + beatmapPath);
 
-//Obtain all the configurations
-configs = JSON.parse(fs.readFileSync('./selection.json', { encoding: 'utf-8' }))
+// Read Configuration for Selection of osu beatmaps.
 
-const osuApi = new osu.Api(configs.osuApiKey, {
-    completeScores: true
-})
+// If there's no configuration
 
-//Select the correct beatmaps path.
-//By default it assumes that it is in the current directory under the name beatmaps
-const beatmapPath = path.resolve("./", "./beatmaps")
+// Make sure beatmap folder exists
 
-console.log("Selecting Path " + beatmapPath)
+if (fs.existsSync(beatmapPath) === false) {
+  throw new Error('Beatmaps folder does not exist! Exiting...');
+}
 
+// Get all files in
+files = fs.readdirSync(beatmapPath);
 
-//Read Configuration for Selection of osu beatmaps.
+// For each file in the folder, split to find the number.
+// <Number> <Artist> - <Song Name>.osz is the usual file name.
+// 544647 HoneyWorks feat.sana - Kawaiku Naritai (Short Ver.).osz is an example
 
+const proms = [];
 
-//If there's no configuration
-if (configs === undefined)
-    throw new Error("No Configuration!")
+for (let i = 0; i < files.length; i++) {
+  proms.push(selection(files[i], beatmapPath));
+}
 
-//Make sure beatmap folder exists
-
-if (fs.existsSync(beatmapPath) === false)
-    throw new Error("Beatmaps folder does not exist! Exiting...")
-
-
-//Get all files in 
-files = fs.readdirSync(beatmapPath)
-
-//For each file in the folder, split to find the number.
-//<Number> <Artist> - <Song Name>.osz is the usual file name.
-//544647 HoneyWorks feat.sana - Kawaiku Naritai (Short Ver.).osz is an example
-files.forEach(file => {
-    console.log(file.split(' ')[0])
+Promise.all(proms).then((err) => {
+  console.log('Complete!');
 });
