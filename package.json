@@ -1,0 +1,14 @@
+{
+    "name": "osu-filter",
+    "version": "1.0.0",
+    "description": "Filter for osu!Beatmaps",
+    "main": "index.js",
+    "scripts": {
+        "build": "nexe -t 10.15.3"
+    },
+    "author": "Xav",
+    "license": "BSD",
+    "dependencies": {
+        "node-osu": "^1.3.3"
+    }
+}
