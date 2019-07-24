@@ -24,16 +24,15 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   // Sort the given mapset by their SR.
 
   beatmapsetInfo.sort((a, b) => {
-    if (
+    return (
       parseFloat(a['difficulty']['rating']) >
       parseInt(b['difficulty']['rating'])
-    ) {
-      return 1;
-    } else return -1;
+    );
   });
   // Check With Precedence.
   // If the rule is violated, then it is true.
 
+  console.log(beatmapsetInfo);
   constraints.some((x) => {
     console.log('Exec : ' + x);
     return x(beatmapsetInfo);
