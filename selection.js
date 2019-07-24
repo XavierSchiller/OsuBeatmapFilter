@@ -17,7 +17,6 @@ const constraints = [
  * @param {*} beatmapsetPath Full Path of the .osz file.
  */
 async function processBeatmaps(beatmapsetName, beatmapsetPath) {
-  console.log('Fetching Beatmap');
   const beatmapsetID = beatmapsetName.split(' ')[0];
   beatmapsetInfo = await osuApi.getBeatmaps({s: beatmapsetID});
   const deletebeatmap = false;
@@ -34,8 +33,7 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
 
   console.log(beatmapsetInfo);
   constraints.some((x) => {
-    console.log('Exec : ' + x);
-    return x(beatmapsetInfo);
+    return x(beatmapsetInfo, beatmapsetPath);
   });
   if (deletebeatmap === true) {
     remove(beatmapsetPath);
@@ -54,9 +52,10 @@ function remove(beatmapsetPath) {
 /**
  * Checks if Mapper Constraint is Violated.
  * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  * @return {Boolean} True if Violated; False otherwise.
  */
-function checkMappers(beatmapsetInfo) {
+function checkMappers(beatmapsetInfo, beatmapsetPath) {
   if (configs.avoidedMappers.includes(beatmapsetInfo[0]['creator'])) {
     console.log('Mapper Parameter Violated');
     return true;
@@ -67,9 +66,10 @@ function checkMappers(beatmapsetInfo) {
 /**
  * Checks if BPM Constraint is Violated.
  * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  * @return {Boolean} True if Violated; False otherwise.
  */
-function checkBPM(beatmapsetInfo) {
+function checkBPM(beatmapsetInfo, beatmapsetPath) {
   BPM = parseFloat(beatmapsetInfo[beatmapsetInfo.length - 1]['bpm']);
   if (BPM < configs.minimumBPM || BPM > configs.maximumBPM) {
     console.log('BPM parameter Violated.');
@@ -81,9 +81,10 @@ function checkBPM(beatmapsetInfo) {
 /**
  * Checks if Combo Constraint is Violated.
  * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  * @return {Boolean} True if Violated; False otherwise.
  */
-function checkCombo(beatmapsetInfo) {
+function checkCombo(beatmapsetInfo, beatmapsetPath) {
   Combo = parseInt(beatmapsetInfo[beatmapsetInfo.length - 1]['maxCombo']);
   if (Combo < configs.minimumCombo || Combo > configs.maximumCombo) {
     console.log('Combo Parameter Violated');
@@ -95,9 +96,10 @@ function checkCombo(beatmapsetInfo) {
 /**
  * Checks if Length Constraint is Violated.
  * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  * @return {Boolean} True if Violated; False otherwise.
  */
-function checkLength(beatmapsetInfo) {
+function checkLength(beatmapsetInfo, beatmapsetPath) {
   length = parseFloat(
       beatmapsetInfo[beatmapsetInfo.length - 1]['time']['total']
   );
@@ -111,9 +113,10 @@ function checkLength(beatmapsetInfo) {
 /**
  * Checks if approvalStatus Constraint is Violated.
  * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  * @return {Boolean} True if Violated; False otherwise.
  */
-function checkRanked(beatmapsetInfo) {
+function checkRanked(beatmapsetInfo, beatmapsetPath) {
   if (beatmapsetInfo[0]['approvalStatus'] != configs.approvalStatus) {
     console.log('Ranked Parameter Violated');
     return true;
@@ -124,9 +127,10 @@ function checkRanked(beatmapsetInfo) {
 /**
  * Checks if SR Constraint is Violated.
  * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  * @return {boolean} True if Violated; False otherwise.
  */
-function checkSR(beatmapsetInfo) {
+function checkSR(beatmapsetInfo, beatmapsetPath) {
   const arr = [];
   beatmapsetInfo.forEach((e) =>
     parseFloat(arr.push(e['difficulty']['rating']))
