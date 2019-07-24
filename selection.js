@@ -19,7 +19,6 @@ const constraints = [
 async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   const beatmapsetID = beatmapsetName.split(' ')[0];
   beatmapsetInfo = await osuApi.getBeatmaps({s: beatmapsetID});
-  const deletebeatmap = false;
   // Sort the given mapset by their SR.
 
   beatmapsetInfo.sort((a, b) => {
@@ -35,9 +34,6 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   constraints.some((x) => {
     return x(beatmapsetInfo, beatmapsetPath);
   });
-  if (deletebeatmap === true) {
-    remove(beatmapsetPath);
-  }
 }
 
 /**
