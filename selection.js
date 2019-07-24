@@ -1,18 +1,26 @@
 const {configs, osuApi} = require('./config');
 const fs = require('fs');
-
 module.exports = processBeatmaps;
+
+const constraints = [
+  checkSR,
+  checkRanked,
+  checkLength,
+  checkCombo,
+  checkBPM,
+  checkMappers,
+];
+
 /**
  * Processes the Beatmaps according to their constraints.
- * @param {*} beatmapsetName Name of the .isz file.
+ * @param {*} beatmapsetName Name of the .osz file.
  * @param {*} beatmapsetPath Full Path of the .osz file.
  */
 async function processBeatmaps(beatmapsetName, beatmapsetPath) {
+  console.log('Fetching Beatmap');
   const beatmapsetID = beatmapsetName.split(' ')[0];
-  console.log('Fetching Information for beatmapsetID' + beatmapsetID);
   beatmapsetInfo = await osuApi.getBeatmaps({s: beatmapsetID});
-  console.log('Fetched Information for beatmapsetID' + beatmapsetID);
-  let deletebeatmap = false;
+  const deletebeatmap = false;
   // Sort the given mapset by their SR.
 
   beatmapsetInfo.sort((a, b) => {
@@ -25,14 +33,11 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   });
   // Check With Precedence.
   // If the rule is violated, then it is true.
-  deletebeatmap =
-    checkSR(beatmapsetInfo) || // done
-    checkRanked(beatmapsetInfo) || // done
-    checkLength(beatmapsetInfo) || // done
-    checkCombo(beatmapsetInfo) || // done
-    checkBPM(beatmapsetInfo) || // done
-    checkMappers(beatmapsetInfo);
 
+  constraints.some((x) => {
+    console.log('Exec : ' + x);
+    return x(beatmapsetInfo);
+  });
   if (deletebeatmap === true) {
     remove(beatmapsetPath);
   }
