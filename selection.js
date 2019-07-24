@@ -2,22 +2,6 @@ const path = require('path');
 const {configs, osuApi} = require('./config');
 const fs = require('fs');
 
-/**
- * {
-  "osuApiKey": "e81348a27e0594553ea43f8251ba550ff8c50e52",
-  "minimumSR": 5.6,
-  "maximumSR": 10.6,
-  "approvalStatus": "Ranked",
-  "minimumlength": 120,
-  "maximumLength": 6000,
-  "minimumCombo": 500,
-  "maximumCombo": -1,
-  "minimumBPM": 160,
-  "maximumBPM": 200,
-  "avoidedMappers": ["Sotarks"]
-}
-
- */
 
 module.exports = processBeatmaps;
 /**
