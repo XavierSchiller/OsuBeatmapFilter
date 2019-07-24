@@ -19,7 +19,6 @@ const fs = require('fs');
 
  */
 
- 
 module.exports = processBeatmaps;
 /**
  *
@@ -56,14 +55,17 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   if (deletebeatmap === true) console.log('Deleting beatmap: ' + beatmapsetID);
 }
 
-
 /**
  *
  * @param {*} beatmapsetInfo
  * @return {Boolean}
  */
 function checkMappers(beatmapsetInfo) {
-  return config.avoidedMappers.includes(beatmapsetInfo['creators']);
+  if (configs.avoidedMappers.includes(beatmapsetInfo['creator'])) {
+    console.log('Mapper Parameter Violated');
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -72,10 +74,12 @@ function checkMappers(beatmapsetInfo) {
  * @return {Boolean}
  */
 function checkBPM(beatmapsetInfo) {
-  return (
-    beatmapsetInfo[beatmapsetInfo.length - 1]['bpm'] < configs.minimumBPM ||
-    beatmapsetInfo[beatmapsetInfo.length - 1]['bpm'] > configs.maximumBPM
-  );
+  BPM = parseFloat(beatmapsetInfo[beatmapsetInfo.length - 1]['bpm']);
+  if (BPM < configs.minimumBPM || BPM > configs.maximumBPM) {
+    console.log('BPM parameter Violated.');
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -84,11 +88,12 @@ function checkBPM(beatmapsetInfo) {
  * @return {Boolean}
  */
 function checkCombo(beatmapsetInfo) {
-  return (
-    beatmapsetInfo[beatmapsetInfo.length - 1]['maxCombo'] <
-      configs.minimumCombo ||
-    beatmapsetInfo[beatmapsetInfo.length - 1]['maxCombo'] > configs.maximumCombo
-  );
+  Combo = parseInt(beatmapsetInfo[beatmapsetInfo.length - 1]['maxCombo']);
+  if (Combo < configs.minimumCombo || Combo > configs.maximumCombo) {
+    console.log('Combo Parameter Violated');
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -97,12 +102,14 @@ function checkCombo(beatmapsetInfo) {
  * @return {Boolean}
  */
 function checkLength(beatmapsetInfo) {
-  return (
-    beatmapsetInfo[beatmapsetInfo.length - 1]['time']['total'] <
-      configs.minimumLength ||
-    beatmapsetInfo[beatmapsetInfo.length - 1]['time']['total'] >
-      configs.maximumLength
+  length = parseFloat(
+      beatmapsetInfo[beatmapsetInfo.length - 1]['time']['total']
   );
+  if (length < configs.minimumLength || length > configs.maximumLength) {
+    console.log('Length Parameter Violated.');
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -111,7 +118,11 @@ function checkLength(beatmapsetInfo) {
  * @return {Boolean}
  */
 function checkRanked(beatmapsetInfo) {
-  return beatmapsetInfo[0]['approvalStatus'] != configs.approvalStatus;
+  if (beatmapsetInfo[0]['approvalStatus'] != configs.approvalStatus) {
+    console.log('Ranked Parameter Violated');
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -121,11 +132,17 @@ function checkRanked(beatmapsetInfo) {
  */
 function checkSR(beatmapsetInfo) {
   const arr = [];
-  beatmapsetInfo.forEach((e) => arr.push(e['difficulty']['rating']));
-  return (
+  beatmapsetInfo.forEach((e) =>
+    parseFloat(arr.push(e['difficulty']['rating']))
+  );
+  if (
     arr[arr.length - 1] < configs.minimumSR ||
     arr[arr.length - 1] > configs.maximumSR
-  );
+  ) {
+    console.log('SR parameter Violated.');
+    return true;
+  }
+  return false;
 }
 
 processBeatmaps(
