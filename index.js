@@ -25,13 +25,27 @@ files = fs.readdirSync(beatmapPath);
 // <Number> <Artist> - <Song Name>.osz is the usual file name.
 // 544647 HoneyWorks feat.sana - Kawaiku Naritai (Short Ver.).osz is an example
 
-const proms = [];
+/**
+ * Sleeps for x duration of time
+ * @param {int} ms Time to wait in ms
+ * @return {Promise}
+ */
+function sleep(ms) {
+  console.log('Waiting for 5 seconds before API call.');
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+/**
+ * Starts the Script.
+ */
+async function start() {
+  const proms = [];
 
-for (let i = 0; i < files.length; i++) {
-  beatmapsetPath = path.resolve(beatmapPath, files[i]);
-  proms.push(selection(files[i], beatmapsetPath));
+  for (let i = 0; i < files.length; i++) {
+    beatmapsetPath = path.resolve(beatmapPath, files[i]);
+    proms.push(selection(files[i], beatmapsetPath));
+    if (i % 10 === 0) await sleep(5000);
+  }
+  await Promise.all(proms);
 }
 
-Promise.all(proms).then((err) => {
-  console.log('Complete!');
-});
+Promise.all([start()]).then((e) => console.log('Script Exiting!'));
