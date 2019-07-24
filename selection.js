@@ -53,7 +53,7 @@ function remove(beatmapsetPath) {
  * @return {Boolean} True if Violated; False otherwise.
  */
 function checkMappers(beatmapsetInfo) {
-  if (configs.avoidedMappers.includes(beatmapsetInfo['creator'])) {
+  if (configs.avoidedMappers.includes(beatmapsetInfo[0]['creator'])) {
     console.log('Mapper Parameter Violated');
     return true;
   }
