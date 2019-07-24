@@ -1,7 +1,5 @@
-const path = require('path');
 const {configs, osuApi} = require('./config');
 const fs = require('fs');
-
 
 module.exports = processBeatmaps;
 /**
@@ -10,7 +8,6 @@ module.exports = processBeatmaps;
  * @param {*} beatmapsetPath
  */
 async function processBeatmaps(beatmapsetName, beatmapsetPath) {
-  console.log(configs);
   const beatmapsetID = beatmapsetName.split(' ')[0];
   console.log('Fetching Information for beatmapsetID' + beatmapsetID);
   beatmapsetInfo = await osuApi.getBeatmaps({s: beatmapsetID});
@@ -36,7 +33,18 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
     checkBPM(beatmapsetInfo) || // done
     checkMappers(beatmapsetInfo);
 
-  if (deletebeatmap === true) console.log('Deleting beatmap: ' + beatmapsetID);
+  if (deletebeatmap === true) {
+    remove(beatmapsetPath);
+  }
+}
+
+/**
+ *
+ * @param {*} pathA
+ */
+function remove(pathA) {
+  console.log('Deleting File...' + pathA);
+  fs.unlinkSync(pathA);
 }
 
 /**
@@ -128,8 +136,12 @@ function checkSR(beatmapsetInfo) {
   }
   return false;
 }
-
-processBeatmaps(
-    '99611 Suirenji Ruka starring Yamazaki Haruka - Tsuki no Inori.osz',
-    ''
-);
+/*
+Promise.all([
+  processBeatmaps(
+      '99611 Suirenji Ruka starring Yamazaki Haruka - Tsuki no Inori.osz',
+      '/home/xavier/Documents/Projects/Osu Filter/beatmaps/99611
+      Suirenji Ruka starring Yamazaki Haruka - Tsuki no Inori.osz'
+  ),
+]).then((e) => console.log('complete!'));
+*/
