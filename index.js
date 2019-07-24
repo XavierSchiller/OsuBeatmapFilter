@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const selection = require('./selection');
 // Select the correct beatmaps path.
-// By default it assumes that it is in the current directory under the name beatmaps
+// By default it assumes that it is in the
+// current directory under the name beatmaps
 const beatmapPath = path.resolve('./', './beatmaps');
 
 console.log('Selecting Path ' + beatmapPath);
@@ -27,7 +28,8 @@ files = fs.readdirSync(beatmapPath);
 const proms = [];
 
 for (let i = 0; i < files.length; i++) {
-  proms.push(selection(files[i], beatmapPath));
+  beatmapsetPath = path.resolve(beatmapPath, files[i]);
+  proms.push(selection(files[i], beatmapsetPath));
 }
 
 Promise.all(proms).then((err) => {
