@@ -3,9 +3,9 @@ const fs = require('fs');
 
 module.exports = processBeatmaps;
 /**
- *
- * @param {*} beatmapsetName
- * @param {*} beatmapsetPath
+ * Processes the Beatmaps according to their constraints.
+ * @param {*} beatmapsetName Name of the .isz file.
+ * @param {*} beatmapsetPath Full Path of the .osz file.
  */
 async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   const beatmapsetID = beatmapsetName.split(' ')[0];
@@ -39,18 +39,18 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
 }
 
 /**
- *
- * @param {*} pathA
+ * Removes the file at beatmapsetPath
+ * @param {*} beatmapsetPath path to the .osz file.
  */
-function remove(pathA) {
-  console.log('Deleting File...' + pathA);
-  fs.unlinkSync(pathA);
+function remove(beatmapsetPath) {
+  console.log('Deleting File...' + beatmapsetPath);
+  fs.unlinkSync(beatmapsetPath);
 }
 
 /**
- *
- * @param {*} beatmapsetInfo
- * @return {Boolean}
+ * Checks if Mapper Constraint is Violated.
+ * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @return {Boolean} True if Violated; False otherwise.
  */
 function checkMappers(beatmapsetInfo) {
   if (configs.avoidedMappers.includes(beatmapsetInfo['creator'])) {
@@ -61,9 +61,9 @@ function checkMappers(beatmapsetInfo) {
 }
 
 /**
- *
- * @param {*} beatmapsetInfo
- * @return {Boolean}
+ * Checks if BPM Constraint is Violated.
+ * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @return {Boolean} True if Violated; False otherwise.
  */
 function checkBPM(beatmapsetInfo) {
   BPM = parseFloat(beatmapsetInfo[beatmapsetInfo.length - 1]['bpm']);
@@ -75,9 +75,9 @@ function checkBPM(beatmapsetInfo) {
 }
 
 /**
- *
- * @param {*} beatmapsetInfo
- * @return {Boolean}
+ * Checks if Combo Constraint is Violated.
+ * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @return {Boolean} True if Violated; False otherwise.
  */
 function checkCombo(beatmapsetInfo) {
   Combo = parseInt(beatmapsetInfo[beatmapsetInfo.length - 1]['maxCombo']);
@@ -89,9 +89,9 @@ function checkCombo(beatmapsetInfo) {
 }
 
 /**
- *
- * @param {*} beatmapsetInfo
- * @return {Boolean}
+ * Checks if Length Constraint is Violated.
+ * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @return {Boolean} True if Violated; False otherwise.
  */
 function checkLength(beatmapsetInfo) {
   length = parseFloat(
@@ -105,9 +105,9 @@ function checkLength(beatmapsetInfo) {
 }
 
 /**
- *
- * @param {*} beatmapsetInfo
- * @return {Boolean}
+ * Checks if approvalStatus Constraint is Violated.
+ * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @return {Boolean} True if Violated; False otherwise.
  */
 function checkRanked(beatmapsetInfo) {
   if (beatmapsetInfo[0]['approvalStatus'] != configs.approvalStatus) {
@@ -118,9 +118,9 @@ function checkRanked(beatmapsetInfo) {
 }
 
 /**
- *
- * @param {*} beatmapsetInfo
- * @return {boolean}
+ * Checks if SR Constraint is Violated.
+ * @param {*} beatmapsetInfo Information of the beatmap from the API.
+ * @return {boolean} True if Violated; False otherwise.
  */
 function checkSR(beatmapsetInfo) {
   const arr = [];
@@ -136,12 +136,3 @@ function checkSR(beatmapsetInfo) {
   }
   return false;
 }
-/*
-Promise.all([
-  processBeatmaps(
-      '99611 Suirenji Ruka starring Yamazaki Haruka - Tsuki no Inori.osz',
-      '/home/xavier/Documents/Projects/Osu Filter/beatmaps/99611
-      Suirenji Ruka starring Yamazaki Haruka - Tsuki no Inori.osz'
-  ),
-]).then((e) => console.log('complete!'));
-*/
