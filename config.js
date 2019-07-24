@@ -1,5 +1,5 @@
 const osu = require('node-osu');
-const fs = require('fs')
+const fs = require('fs');
 // Obtain all the configurations
 const configs = JSON.parse(
     fs.readFileSync('./selection.json', {encoding: 'utf-8'})
