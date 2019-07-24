@@ -1,3 +1,5 @@
 node_modules/
 beatmaps/
 build/
+beatmaps*
+selection.json
