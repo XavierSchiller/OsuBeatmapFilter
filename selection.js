@@ -30,7 +30,6 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
   // Check With Precedence.
   // If the rule is violated, then it is true.
 
-  console.log(beatmapsetInfo);
   constraints.some((x) => {
     return x(beatmapsetInfo, beatmapsetPath);
   });
@@ -41,8 +40,9 @@ async function processBeatmaps(beatmapsetName, beatmapsetPath) {
  * @param {*} beatmapsetPath path to the .osz file.
  */
 function remove(beatmapsetPath) {
-  console.log('Deleting File...' + beatmapsetPath);
-  fs.unlinkSync(beatmapsetPath);
+  const violatedParameter = remove.caller.name.substring(5);
+  console.log(`[${violatedParameter} Parameter Violated] Deleting File ${beatmapsetPath}`);
+  // fs.unlinkSync(beatmapsetPath);
 }
 
 /**
@@ -53,7 +53,7 @@ function remove(beatmapsetPath) {
  */
 function checkMappers(beatmapsetInfo, beatmapsetPath) {
   if (configs.avoidedMappers.includes(beatmapsetInfo[0]['creator'])) {
-    console.log('Mapper Parameter Violated');
+    remove(beatmapsetPath);
     return true;
   }
   return false;
@@ -68,7 +68,7 @@ function checkMappers(beatmapsetInfo, beatmapsetPath) {
 function checkBPM(beatmapsetInfo, beatmapsetPath) {
   BPM = parseFloat(beatmapsetInfo[beatmapsetInfo.length - 1]['bpm']);
   if (BPM < configs.minimumBPM || BPM > configs.maximumBPM) {
-    console.log('BPM parameter Violated.');
+    remove(beatmapsetPath);
     return true;
   }
   return false;
@@ -83,7 +83,7 @@ function checkBPM(beatmapsetInfo, beatmapsetPath) {
 function checkCombo(beatmapsetInfo, beatmapsetPath) {
   Combo = parseInt(beatmapsetInfo[beatmapsetInfo.length - 1]['maxCombo']);
   if (Combo < configs.minimumCombo || Combo > configs.maximumCombo) {
-    console.log('Combo Parameter Violated');
+    remove(beatmapsetPath);
     return true;
   }
   return false;
@@ -100,7 +100,7 @@ function checkLength(beatmapsetInfo, beatmapsetPath) {
       beatmapsetInfo[beatmapsetInfo.length - 1]['time']['total']
   );
   if (length < configs.minimumLength || length > configs.maximumLength) {
-    console.log('Length Parameter Violated.');
+    remove(beatmapsetPath);
     return true;
   }
   return false;
@@ -114,7 +114,7 @@ function checkLength(beatmapsetInfo, beatmapsetPath) {
  */
 function checkRanked(beatmapsetInfo, beatmapsetPath) {
   if (beatmapsetInfo[0]['approvalStatus'] != configs.approvalStatus) {
-    console.log('Ranked Parameter Violated');
+    remove(beatmapsetPath);
     return true;
   }
   return false;
@@ -135,7 +135,7 @@ function checkSR(beatmapsetInfo, beatmapsetPath) {
     arr[arr.length - 1] < configs.minimumSR ||
     arr[arr.length - 1] > configs.maximumSR
   ) {
-    console.log('SR parameter Violated.');
+    remove(beatmapsetPath);
     return true;
   }
   return false;
