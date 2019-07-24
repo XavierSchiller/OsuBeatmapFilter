@@ -3,3 +3,4 @@ beatmaps/
 build/
 beatmaps*
 selection.json
+.vscode/

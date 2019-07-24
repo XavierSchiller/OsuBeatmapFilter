@@ -51,7 +51,7 @@ beatmaps/
 and `beatmaps/` should have
 
 ```bash
-1239809 PPmap - PPTitle (PPSize).osz
+1239809 Artist - Song Title.osz
 .
 .
 .
@@ -71,4 +71,12 @@ node compile.js
 
 The resulting target should be in `build/` 
 
-### I should really put some license here.
+## TODO
+
+Additional Section where I detail what remains to be Implemented.
+
+- Add Inclusive Parameters (If between 4-5, then if 4.5 diff exists, do not delete.)
+- Make a GUI for this. (Electron is hopefully lightweight.)
+- Add linux builds into Releases. 
+- Add Bypass Mappers. (Mappers where if their maps exist, do not delete no matter what.)
+- Use Local beatmap calculations rather than depend on API. (Need to read .osz for this.)
